@@ -40,6 +40,10 @@
 #define RW_OPENGL
 #endif
 
+#ifdef RW_3DS
+#define RWDEVICE c3d
+#endif
+
 namespace rw {
 
 #ifdef RW_PS2
@@ -539,6 +543,7 @@ enum Platform
 
 	PLATFORM_WDGL = 11,	// WarDrum OpenGL
 	PLATFORM_GL3  = 12,	// my GL3 implementation
+	PLATFORM_3DS  = 13,
 
 	NUM_PLATFORMS,
 
@@ -612,6 +617,7 @@ enum PluginID
 	ID_RASTERD3D9    = MAKEPLUGINID(VEND_RASTER, PLATFORM_D3D9),
 	ID_RASTERWDGL    = MAKEPLUGINID(VEND_RASTER, PLATFORM_WDGL),
 	ID_RASTERGL3     = MAKEPLUGINID(VEND_RASTER, PLATFORM_GL3),
+	ID_RASTERC3D     = MAKEPLUGINID(VEND_RASTER, PLATFORM_3DS),
 
 	// anything driver/device related (only as allocation tag)
 	ID_DRIVER        = MAKEPLUGINID(VEND_DRIVER, 0)

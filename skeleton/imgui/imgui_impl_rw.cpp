@@ -116,19 +116,19 @@ ImGui_ImplRW_Init(void)
 	ImGui::CreateContext();
 	ImGuiIO &io = ImGui::GetIO();
 
-	io.KeyMap[ImGuiKey_Tab] = KEY_TAB;
-	io.KeyMap[ImGuiKey_LeftArrow] = KEY_LEFT;
-	io.KeyMap[ImGuiKey_RightArrow] = KEY_RIGHT;
-	io.KeyMap[ImGuiKey_UpArrow] = KEY_UP;
-	io.KeyMap[ImGuiKey_DownArrow] = KEY_DOWN;
-	io.KeyMap[ImGuiKey_PageUp] = KEY_PGUP;
-	io.KeyMap[ImGuiKey_PageDown] = KEY_PGDN;
-	io.KeyMap[ImGuiKey_Home] = KEY_HOME;
-	io.KeyMap[ImGuiKey_End] = KEY_END;
-	io.KeyMap[ImGuiKey_Delete] = KEY_DEL;
-	io.KeyMap[ImGuiKey_Backspace] = KEY_BACKSP;
-	io.KeyMap[ImGuiKey_Enter] = KEY_ENTER;
-	io.KeyMap[ImGuiKey_Escape] = KEY_ESC;
+	io.KeyMap[ImGuiKey_Tab] = sk::KEY_TAB;
+	io.KeyMap[ImGuiKey_LeftArrow] = sk::KEY_LEFT;
+	io.KeyMap[ImGuiKey_RightArrow] = sk::KEY_RIGHT;
+	io.KeyMap[ImGuiKey_UpArrow] = sk::KEY_UP;
+	io.KeyMap[ImGuiKey_DownArrow] = sk::KEY_DOWN;
+	io.KeyMap[ImGuiKey_PageUp] = sk::KEY_PGUP;
+	io.KeyMap[ImGuiKey_PageDown] = sk::KEY_PGDN;
+	io.KeyMap[ImGuiKey_Home] = sk::KEY_HOME;
+	io.KeyMap[ImGuiKey_End] = sk::KEY_END;
+	io.KeyMap[ImGuiKey_Delete] = sk::KEY_DEL;
+	io.KeyMap[ImGuiKey_Backspace] = sk::KEY_BACKSP;
+	io.KeyMap[ImGuiKey_Enter] = sk::KEY_ENTER;
+	io.KeyMap[ImGuiKey_Escape] = sk::KEY_ESC;
 	io.KeyMap[ImGuiKey_A] = 'A';
 	io.KeyMap[ImGuiKey_C] = 'C';
 	io.KeyMap[ImGuiKey_V] = 'V';
@@ -207,7 +207,7 @@ ImGuiEventHandler(sk::Event e, void *param)
 
 	ImGuiIO &io = ImGui::GetIO();
 	MouseState *ms;
-	uint c;
+	rw::uint c;
 
 	switch(e){
 	case KEYDOWN:
@@ -221,7 +221,7 @@ ImGuiEventHandler(sk::Event e, void *param)
 			io.KeysDown[c] = 0;
 		return EVENTPROCESSED;
 	case CHARINPUT:
-		c = (uint)(uintptr)param;
+		c = (rw::uint)(uintptr)param;
 		io.AddInputCharacter((unsigned short)c);
 		return EVENTPROCESSED;
 	case MOUSEMOVE:

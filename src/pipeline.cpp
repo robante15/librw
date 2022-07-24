@@ -96,6 +96,18 @@ instV3d(int type, uint8 *dst, V3d *src, uint32 numVertices, uint32 stride)
 			dst += stride;
 			src++;
 		}
+	else if(type == VERT_COMPNORM2)
+		for(uint32 i = 0; i < numVertices; i++){
+			/* use the largest vector we can fit in the byte space */
+			float m = fmax(fabs(src->x), fmax(fabs(src->y), fabs(src->z)));
+			float s = 127.0f / m;
+			((int8*)dst)[0] = (int8)(s * src->x);
+			((int8*)dst)[1] = (int8)(s * src->y);
+			((int8*)dst)[2] = (int8)(s * src->z);
+			((int8*)dst)[3] = 0;
+			dst += stride;
+			src++;
+		}
 	else
 		assert(0 && "unsupported instV3d type");
 }

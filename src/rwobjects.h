@@ -150,6 +150,8 @@ struct Image
 	void applyMask(Image *mask);
 	void removeMask(void);
 	Image *extractMask(void);
+	void downSample(int);
+	void upscale(int);
 
 	static void setSearchPath(const char*);
 	static void printSearchPath(void);
@@ -317,8 +319,10 @@ struct Raster
 
 void conv_RGBA8888_from_RGBA8888(uint8 *out, uint8 *in);
 void conv_BGRA8888_from_RGBA8888(uint8 *out, uint8 *in);
+void conv_ABGR8888_from_RGBA8888(uint8 *out, uint8 *in);
 void conv_RGBA8888_from_RGB888(uint8 *out, uint8 *in);
 void conv_BGRA8888_from_RGB888(uint8 *out, uint8 *in);
+void conv_ABGR8888_from_RGB888(uint8 *out, uint8 *in);
 void conv_RGB888_from_RGB888(uint8 *out, uint8 *in);
 void conv_BGR888_from_RGB888(uint8 *out, uint8 *in);
 void conv_ARGB1555_from_ARGB1555(uint8 *out, uint8 *in);

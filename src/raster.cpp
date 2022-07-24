@@ -15,6 +15,8 @@
 //#include "d3d/rwd3d8.h"
 //#include "d3d/rwd3d9.h"
 #include "gl/rwgl3.h"
+#include "3ds/rw3ds.h"
+#include "3ds/tex/swizzle.h"
 
 #define PLUGIN_ID 0
 
@@ -233,6 +235,15 @@ conv_RGBA8888_from_RGBA8888(uint8 *out, uint8 *in)
 }
 
 void
+conv_ABGR8888_from_RGBA8888(uint8 *out, uint8 *in)
+{
+	out[0] = in[3];
+	out[1] = in[2];
+	out[2] = in[1];
+	out[3] = in[0];
+}
+
+void
 conv_BGRA8888_from_RGBA8888(uint8 *out, uint8 *in)
 {
 	out[2] = in[0];
@@ -248,6 +259,15 @@ conv_RGBA8888_from_RGB888(uint8 *out, uint8 *in)
 	out[1] = in[1];
 	out[2] = in[2];
 	out[3] = 0xFF;
+}
+
+void
+conv_ABGR8888_from_RGB888(uint8 *out, uint8 *in)
+{
+	out[0] = 0xFF;
+	out[1] = in[2];
+	out[2] = in[1];
+	out[3] = in[0];
 }
 
 void
@@ -539,7 +559,10 @@ Raster::convertTexToCurrentPlatform(rw::Raster *ras)
 	Raster *newras = Raster::create(width, height, depth, format);
 	newras->setFromImage(img);
 	img->destroy();
-	int numLevels = ras->getNumLevels();
+	//int numLevels = ras->getNumLevels();
+	#define min(x, y) ((x) < (y) ? (x) : (y))	
+		int numLevels = min(ras->getNumLevels(), newras->getNumLevels());
+	#undef min	
 	for(int i = 1; i < numLevels; i++){
 		ras->lock(i, Raster::LOCKREAD);
 		img = ras->toImage();
@@ -549,6 +572,7 @@ Raster::convertTexToCurrentPlatform(rw::Raster *ras)
 		newras->setFromImage(img);
 		newras->unlock(i);
 		ras->unlock(i);
+		img->destroy();
 	}
 	ras->destroy();
 	ras = newras;

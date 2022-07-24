@@ -51,7 +51,8 @@ enum {
 	VERT_FLOAT4,
 	VERT_ARGB,
 	VERT_RGBA,
-	VERT_COMPNORM
+	VERT_COMPNORM,
+	VERT_COMPNORM2
 };
 
 void instV4d(int type, uint8 *dst, V4d *src, uint32 numVertices, uint32 stride);

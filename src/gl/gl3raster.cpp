@@ -25,7 +25,7 @@ static uint32
 getLevelSize(Raster *raster, int32 level)
 {
 	int i;
-	Gl3Raster *natras = GETGL3RASTEREXT(raster);
+	
 
 	int w = raster->originalWidth;
 	int h = raster->originalHeight;
@@ -33,6 +33,7 @@ getLevelSize(Raster *raster, int32 level)
 	int minDim = 1;
 
 #ifdef RW_OPENGL
+	Gl3Raster *natras = GETGL3RASTEREXT(raster);
 	switch(natras->internalFormat){
 	case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
 	case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
@@ -779,7 +780,9 @@ rasterToImage(Raster *raster)
 		return nil;
 	}
 		
-	uint8 *in, *out;
+	#ifndef __3DS__
+		uint8 *in, *out;
+	#endif
 	image = Image::create(raster->width, raster->height, depth);
 	image->allocate();
 
@@ -823,9 +826,9 @@ void evictRaster(Raster *raster);
 static void*
 destroyNativeRaster(void *object, int32 offset, int32)
 {
+#ifdef RW_OPENGL
 	Raster *raster = (Raster*)object;
 	Gl3Raster *natras = PLUGINOFFSET(Gl3Raster, object, offset);
-#ifdef RW_OPENGL
 	evictRaster(raster);
 	switch(raster->type){
 	case Raster::NORMAL:
@@ -930,7 +933,9 @@ readNativeTexture(Stream *stream)
 	}
 
 	Raster *raster;
-	Gl3Raster *natras;
+	#ifndef __3DS__
+		Gl3Raster *natras;
+	#endif
 	if(flags & 2){
 		if(!gl3Caps.dxtSupported){
 			tex->destroy();
@@ -943,7 +948,9 @@ readNativeTexture(Stream *stream)
 		raster = Raster::create(width, height, depth, format | Raster::TEXTURE, PLATFORM_GL3);
 	}
 	assert(raster);
-	natras = GETGL3RASTEREXT(raster);
+	#ifndef __3DS__
+		natras = GETGL3RASTEREXT(raster);
+	#endif
 	tex->raster = raster;
 
 	uint32 size;

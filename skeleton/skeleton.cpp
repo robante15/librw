@@ -32,7 +32,11 @@ InitRW(void)
 	for(i = 0; i < n; i++)
 		if(Engine::getVideoModeInfo(&mode, i)){
 //			if(mode.width == 640 && mode.height == 480 && mode.depth == 32)
-			if(mode.width == 1920 && mode.height == 1080 && mode.depth == 32)
+			#ifdef __3DS__
+				if(mode.width == 400 && mode.height == 240 && mode.depth == 32)
+			#else
+				if(mode.width == 1920 && mode.height == 1080 && mode.depth == 32)
+			#endif
 				want = i;
 			printf("mode: %dx%dx%d %d\n", mode.width, mode.height, mode.depth, mode.flags);
 		}

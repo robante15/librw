@@ -17,6 +17,7 @@
 #include "d3d/rwd3d9.h"
 #include "d3d/rwd3dimpl.h"
 #include "gl/rwgl3.h"
+#include "3ds/rw3ds.h"
 
 #define PLUGIN_ID 0
 
@@ -73,7 +74,7 @@ textureClose(void *object, int32 offset, int32 size)
 
 	FORLIST(lnk, TEXTUREGLOBAL(textures)){
 		Texture *tex = LLLinkGetData(lnk, Texture, inGlobalList);
-		printf("Tex still allocated: %d %s %s\n", tex->refCount, tex->name, tex->mask);
+		printf("Tex still allocated: %1d %s %s\n", tex->refCount, tex->name, tex->mask);
 		assert(tex->dict == nil);
 		tex->destroy();
 	}
@@ -481,6 +482,8 @@ Texture::streamReadNative(Stream *stream)
 		return xbox::readNativeTexture(stream);
 	if(platform == PLATFORM_GL3)
 		return gl3::readNativeTexture(stream);
+	if(platform == PLATFORM_3DS)
+		return c3d::readNativeTexture(stream);
 	assert(0 && "unsupported platform");
 	return nil;
 }
@@ -498,6 +501,8 @@ Texture::streamWriteNative(Stream *stream)
 		xbox::writeNativeTexture(this, stream);
 	else if(this->raster->platform == PLATFORM_GL3)
 		gl3::writeNativeTexture(this, stream);
+	else if(this->raster->platform == PLATFORM_3DS)
+		c3d::writeNativeTexture(this, stream);
 	else
 		assert(0 && "unsupported platform");
 }
@@ -515,6 +520,8 @@ Texture::streamGetSizeNative(void)
 		return xbox::getSizeNativeTexture(this);
 	if(this->raster->platform == PLATFORM_GL3)
 		return gl3::getSizeNativeTexture(this);
+	if(this->raster->platform == PLATFORM_3DS)
+		return c3d::getSizeNativeTexture(this);
 	assert(0 && "unsupported platform");
 	return 0;
 }

@@ -7,7 +7,7 @@
 
 #define PSEP_C '/'
 #define PSEP_S "/"
-#ifdef __unix__
+#if defined __unix__ || defined __3DS__
 #include <sys/types.h>
 #include <dirent.h>
 #endif
@@ -33,6 +33,8 @@ int32 build = 0xFFFF;
 	int32 platform = PLATFORM_GL3;
 #elif RW_D3D9
 	int32 platform = PLATFORM_D3D9;
+#elif RW_3DS
+	int32 platform = PLATFORM_3DS;
 #else
 	int32 platform = PLATFORM_NULL;
 #endif
@@ -690,7 +692,7 @@ makePath(char *filename)
 	for(size_t i = 0; i < len; i++)
 		if(filename[i] == '/' || filename[i] == '\\')
 			filename[i] = PSEP_C;
-#ifdef __unix__
+#if defined __unix__ || defined __3DS__
 	correctPathCase(filename);
 #endif
 }

@@ -814,6 +814,109 @@ Image::applyMask(Image *mask)
 }
 
 void
+Image::upscale(int size)
+{
+	if(this->width >= size && this->height >= size)
+		return;
+
+	int sx = size / this->width;
+	int sy = size / this->height;
+	sx = sx ? sx : 1;
+	sy = sy ? sy : 1;
+	
+	int32 nwidth  = (this->width  < size) ? size : this->width;
+	int32 nheight = (this->height < size) ? size : this->height;
+	int32 nstride = this->bpp * nwidth;
+	int32 nsize   = nstride * nheight;
+	
+	uint8 *npixels = rwNewT(uint8, nsize, MEMDUR_EVENT | ID_IMAGE);
+	uint8 *np = npixels;
+	uint8 *op;
+	int x, xr, y, yr;
+	
+	for(y = 0; y < this->height; y++){
+		for (yr = 0; yr < sy; yr++){
+			op = this->pixels + (y * this->stride);
+			for(x = 0; x < this->width; x++){
+				for (xr = 0; xr < sx; xr++){
+					memcpy(np, op, this->bpp);
+					np+=this->bpp;
+				}
+				op+=this->bpp;
+			}
+		}
+	}
+	
+	this->free();
+	this->stride = nstride;
+	this->width = nwidth;
+	this->height = nheight;
+	this->setPixels(npixels);
+}
+
+// void
+// boxFilter(uint8 *dst, Image *img, int x, int y)
+// {
+// 	int32 r = 0, g = 0, b = 0, a = 0, i = 0;
+// 	int bx, by, xs, ys;
+// 	uint8 *src;
+// 	for (by = 0; by < 3; by++){
+// 		for (bx = 0; bx < 3; bx++){
+// 			xs = x + bx - 1;
+// 			ys = y + by - 1;
+// 			if (xs >= 0 && xs < img->width &&
+// 			    ys >= 0 && ys < img->height){
+// 				src = &img->pixels[(xs * img->bpp) + (ys * img->stride)];
+// 				r += src[0];
+// 				g += src[1];
+// 				b += src[2];
+// 				a += src[3];
+// 				i++;
+// 			}
+// 		}
+// 	}
+
+// 	dst[0] = (uint8)(r / i); /* (  0 * 9) / 9 =   0 */
+// 	dst[1] = (uint8)(g / i); /* (255 * 9) / 9 = 255 */
+// 	dst[2] = (uint8)(b / i); /* no need to clamp */
+// 	dst[3] = (uint8)(a / i);
+// }
+
+// void
+// Image::downSample(int power)
+// {
+// 	/* not really the best algorithm, but good enough for now */
+	
+// 	int factor = 1 << power;
+  
+// 	assert(this->width /factor >= 8 &&
+// 	       this->height/factor >= 8);
+	
+// 	int32 nwidth  = this->width  / factor;
+// 	int32 nheight = this->height / factor;
+// 	int32 nstride = this->bpp * nwidth;
+// 	int32 nsize   = nstride * nheight;
+	
+// 	uint8 *npixels = rwNewT(uint8, nsize, MEMDUR_EVENT | ID_IMAGE);
+// 	uint8 *np;
+	
+// 	for(int32 y = 0; y < nheight; y++){
+// 		np = npixels + y * nstride;
+// 		for(int32 x = 0; x < nwidth; x++){
+// 			boxFilter(np, this, x * factor, y * factor);
+// 			np += 4;
+// 		}
+// 	}
+	
+// 	this->free();
+// 	this->stride = nstride;
+// 	this->width = nwidth;
+// 	this->height = nheight;
+// 	this->setPixels(npixels);
+// }
+
+
+void
 Image::removeMask(void)
 {
 	if(this->depth <= 8){
@@ -893,6 +996,8 @@ Image::extractMask(void)
 	}
 	return img;
 }
+
+
 
 void
 Image::setSearchPath(const char *path)
