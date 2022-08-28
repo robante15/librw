@@ -35,7 +35,7 @@
 namespace rw {
 namespace c3d {
 
-int gTexQuality = rg_etc1::cLowQuality;
+rg_etc1::etc1_quality gTexQuality = rg_etc1::cLowQuality;
   
 void
 etc1_common(uint8_t *src, uint8_t **dst, int stride, bool alpha)

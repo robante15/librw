@@ -24,7 +24,11 @@
 */
 
 #include <string.h>
+#ifndef __3DS__
+#include "../../../rw.h"
+#else
 #include "rw.h"
+#endif
 
 /* yikes, I don't actually know C++!
    overloads, references, copy / move, const semantics,

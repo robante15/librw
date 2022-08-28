@@ -114,8 +114,10 @@ project "librw"
 	defines { "LODEPNG_NO_COMPILE_CPP" }
 	files { "src/*.*" }
 	files { "src/*/*.*" }
+	files { "src/3ds/*/*.*" }
 	filter { "platforms:*gl3" }
 		files { "src/gl/glad/*.*" }
+		
 
 project "dumprwtree"
 	kind "ConsoleApp"
