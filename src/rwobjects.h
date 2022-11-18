@@ -876,6 +876,7 @@ struct World
 	void removeClump(Clump *clump);
 	void render(void);
 	void enumerateLights(Atomic *atomic, WorldLights *lightData);
+	void enumerateLights(WorldLights *lightData);
 };
 
 struct TexDictionary
