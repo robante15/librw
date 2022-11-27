@@ -55,11 +55,16 @@ typedef void* C3D_FrameBuf;
 #define vramFree
 #define linearFree free
 
-static inline int
-C3D_TexCalcMaxLevel(uint32_t width, uint32_t height)
-{
+//Dirty fix to build Windows compilation
+#ifndef _MSC_VER
+static inline int C3D_TexCalcMaxLevel(uint32_t width, uint32_t height) {
 	return (31-__builtin_clz(width < height ? width : height)) - 3; // avoid sizes smaller than 8
 }
+#else
+static inline int C3D_TexCalcMaxLevel(uint32_t width, uint32_t height) {
+	return 0;
+}
+#endif
 
 static inline uint32_t
 C3D_TexCalcLevelSize(uint32_t size, int level)
