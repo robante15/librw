@@ -238,3 +238,36 @@ ImGuiEventHandler(sk::Event e, void *param)
 	}
 	return EVENTPROCESSED;
 }
+
+/**
+ * @brief Convierte una estructura rw::RGBA a ImVec4.
+ *
+ * Esta función convierte una estructura rw::RGBA a la representación equivalente en ImVec4 utilizada por ImGui.
+ *
+ * @param color La estructura rw::RGBA que se va a convertir.
+ * @return El color convertido en formato ImVec4.
+ */
+ImVec4 
+rwRGBAToImVec4(const rw::RGBA& color)
+{
+	return ImVec4(color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f, color.alpha / 255.0f);
+}
+
+/**
+ * @brief Convierte una estructura ImVec4 a rw::RGBA.
+ *
+ * Esta función convierte una estructura ImVec4 utilizada por imGui al formato rw:RGBA
+ *
+ * @param imColor La estructura ImVec4 que se va a convertir.
+ * @return El color convertido en formato rw::RGBA.
+ */
+rw::RGBA
+ImVec4TorwRGBA(const ImVec4& imColor)
+{
+	rw::RGBA color;
+	color.red = static_cast<uint8_t>(imColor.x * 255.0f);
+	color.green = static_cast<uint8_t>(imColor.y * 255.0f);
+	color.blue = static_cast<uint8_t>(imColor.z * 255.0f);
+	color.alpha = static_cast<uint8_t>(imColor.w * 255.0f);
+	return color;
+}
