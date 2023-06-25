@@ -13,14 +13,14 @@ newoption {
 	trigger     = "glfwdir64",
 	value       = "PATH",
 	description = "Directory of glfw",
-	default     = "../glfw-3.3.4.bin.WIN64",
+	default     = "vendor/glfw-3.3.8.bin.WIN64",
 }
 
 newoption {
 	trigger     = "glfwdir32",
 	value       = "PATH",
 	description = "Directory of glfw",
-	default     = "../glfw-3.3.4.bin.WIN32",
+	default     = "vendor/glfw-3.3.8.bin.WIN32",
 }
 
 newoption {

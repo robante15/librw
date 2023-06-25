@@ -8,3 +8,7 @@ librw.vcxproj.user
 librw.VC.db
 librw.VC.VC.opendb
 imgui.ini
+
+vendor/glew-2.1.0/
+vendor/glfw-3.3.8.bin.WIN32/
+vendor/glfw-3.3.8.bin.WIN64/
