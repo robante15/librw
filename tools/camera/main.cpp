@@ -9,9 +9,13 @@ rw::V3d zero = { 0.0f, 0.0f, 0.0f };
 rw::EngineOpenParams engineOpenParams;
 float FOV = 70.0f;
 
-rw::RGBA ForegroundColor = { 200, 200, 200, 255 };
-rw::RGBA BackgroundColor = { 64, 64, 64, 0 };
-rw::RGBA BackgroundColorSub = { 74, 74, 74, 0 };
+rw::RGBA ForegroundColor = { 200, 200, 200, 255 };	//Color de texto
+rw::RGBA BackgroundColor = { 64, 64, 64, 0 };		//Fondo principal
+rw::RGBA BackgroundColorSub = { 74, 74, 74, 0 };	//Fondo secundario
+
+// Variables auxiliares para el color de fondo
+ImVec4 imBackgroundColor = rwRGBAToImVec4(BackgroundColor);
+ImVec4 imBackgroundColorSub = rwRGBAToImVec4(BackgroundColorSub);
 
 rw::World *World;
 rw::Charset *Charset;
@@ -228,6 +232,8 @@ DisplayOnScreenInfo(void)
 	Charset->print(str, 100, 100, 0);
 	sprintf(str, "View offset (%.2f, %.2f)", SubCameraData.offset.x, SubCameraData.offset.y);
 	Charset->print(str, 100, 120, 0);
+	sprintf(str, "BackgroundColor (%u, %u, %u, %u)", BackgroundColor.red, BackgroundColor.green, BackgroundColor.blue, BackgroundColor.alpha);
+	Charset->print(str, 100, 140, 0);
 }
 
 void
@@ -251,6 +257,21 @@ ResetCameraAndClump(void)
 	ClumpSetPosition(Clump, &point);
 }
 
+/**
+ * @brief Restablece los colores de fondo a sus valores predeterminados.
+ *
+ */
+void
+ResetBackgroundColors(void)
+{
+	ForegroundColor = { 200, 200, 200, 255 };
+	BackgroundColor = { 64, 64, 64, 0 };
+	BackgroundColorSub = { 74, 74, 74, 0 };
+
+	imBackgroundColor = rwRGBAToImVec4(BackgroundColor);
+	imBackgroundColorSub = rwRGBAToImVec4(BackgroundColorSub);
+}
+
 void
 Gui(void)
 {
@@ -270,9 +291,26 @@ Gui(void)
 	if(ImGui::SliderFloat("Far clip-plane", &SubCameraData.farClipPlane, SubCameraData.nearClipPlane+0.1f, 20.0f))
 		ClipPlaneCallback();
 
-	if(ImGui::Button("Reset"))
+	if(ImGui::Button("Reset camera"))
 		ResetCameraAndClump();
 
+	ImGui::End();
+
+	static bool showBackgroundWindow = true;
+	ImGui::Begin("Background", &showBackgroundWindow);
+	
+	// Crear un selector de color de fondo en ImGui
+	if (ImGui::ColorEdit4("BackgroundColor", &imBackgroundColor.x))
+		BackgroundColor = ImVec4TorwRGBA(imBackgroundColor);
+	
+
+	// Crear un selector de color de fondo en ImGui
+	if (ImGui::ColorEdit4("BackgroundColorSub", &imBackgroundColorSub.x))
+		BackgroundColorSub = ImVec4TorwRGBA(imBackgroundColorSub);
+
+	if (ImGui::Button("Reset background"))
+		ResetBackgroundColors();
+	
 	ImGui::End();
 }
 
